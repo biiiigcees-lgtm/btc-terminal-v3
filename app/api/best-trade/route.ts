@@ -124,8 +124,8 @@ export async function GET() {
       });
     }
 
-    // Apply trade filter
-    const filterResult = filterTrade(evAnalysis, alpha, consensus, indicators, market, sessionState);
+    // Apply trade filter (evAnalysis is non-null here — hardRuleCheck returns false when null)
+    const filterResult = filterTrade(evAnalysis!, alpha, consensus, indicators, market, sessionState);
 
     if (!filterResult.shouldTrade) {
       const noTradeResponse = {

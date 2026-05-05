@@ -1,4 +1,4 @@
-// File: /Users/bigcees/CascadeProjects/btc-terminal-v3/app/api/signal/route.ts
+// File: /home/user/btc-terminal-v3/app/api/signal/route.ts
 import * as entry from '../../../../../app/api/signal/route.js'
 import type { NextRequest } from 'next/server.js'
 

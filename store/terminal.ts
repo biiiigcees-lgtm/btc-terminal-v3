@@ -4,9 +4,13 @@ import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import type {
   TradeLog, SessionStats, MarketData, SignalResult,
-  OrderBookSnapshot, BacktestResult, SignalAccuracyEntry, GroqSignalComment
+  OrderBookSnapshot, BacktestResult, SignalAccuracyEntry, GroqSignalComment,
+  AgentWeights, WeightOptimizationResult,
 } from "@/types";
 import { createAccuracyEntry, resolveAccuracyEntry, calcAccuracyStats } from "@/lib/signalTracker";
+import { optimizeWeights, computeSimulatedPnLStats, BASE_WEIGHTS } from "@/lib/weightOptimizer";
+import type { StrategyMode } from "@/lib/strategyConfig";
+import { modeToThreshold } from "@/lib/strategyConfig";
 
 const SESSION_ID = () => `ses_${Date.now()}`;
 
@@ -39,7 +43,7 @@ interface TerminalStore {
   setSignal: (s: SignalResult) => void;
   setLoading: (v: boolean) => void;
 
-  activeTab: "overview" | "kalshi" | "consensus" | "planner" | "logs" | "alerts" | "backtest" | "accuracy";
+  activeTab: "overview" | "kalshi" | "consensus" | "planner" | "logs" | "alerts" | "backtest" | "accuracy" | "pnltracker";
   setTab: (t: TerminalStore["activeTab"]) => void;
 
   orderBook: OrderBookSnapshot | null;
@@ -86,6 +90,20 @@ interface TerminalStore {
   setUserDirection: (d: "UP" | "DOWN" | null) => void;
   aiAuto: boolean;
   setAiAuto: (v: boolean) => void;
+
+  // ── Strategy & Edge Threshold ───────────────────────────────────────────
+  strategyMode: StrategyMode;
+  setStrategyMode: (m: StrategyMode) => void;
+  edgeThreshold: number; // 0-100 slider
+  setEdgeThreshold: (v: number) => void;
+
+  // ── Custom Weights (from optimizer) ────────────────────────────────────
+  customWeights: AgentWeights | null;
+  setCustomWeights: (w: AgentWeights | null) => void;
+  getWeightOptimization: () => WeightOptimizationResult;
+
+  // ── Simulated PnL Stats (derived from accuracyLog) ─────────────────────
+  getSimulatedPnLStats: () => ReturnType<typeof computeSimulatedPnLStats>;
 }
 
 export const useTerminal = create<TerminalStore>()(
@@ -256,10 +274,28 @@ export const useTerminal = create<TerminalStore>()(
       setUserDirection: (d) => set({ userDirection: d }),
       aiAuto: true,
       setAiAuto: (v) => set({ aiAuto: v }),
+
+      strategyMode: "BALANCED",
+      setStrategyMode: (m) => set({ strategyMode: m, edgeThreshold: modeToThreshold(m) }),
+      edgeThreshold: 50,
+      setEdgeThreshold: (v) => set({ edgeThreshold: v }),
+
+      customWeights: null,
+      setCustomWeights: (w) => set({ customWeights: w }),
+      getWeightOptimization: () => optimizeWeights(get().accuracyLog),
+
+      getSimulatedPnLStats: () => computeSimulatedPnLStats(get().accuracyLog),
     }),
     {
       name: "btc-terminal-v3",
-      partialize: (s) => ({ logs: s.logs, session: s.session, accuracyLog: s.accuracyLog }),
+      partialize: (s) => ({
+        logs: s.logs,
+        session: s.session,
+        accuracyLog: s.accuracyLog,
+        strategyMode: s.strategyMode,
+        edgeThreshold: s.edgeThreshold,
+        customWeights: s.customWeights,
+      }),
     }
   )
 );

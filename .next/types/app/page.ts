@@ -1,4 +1,4 @@
-// File: /Users/bigcees/CascadeProjects/btc-terminal-v3/app/page.tsx
+// File: /home/user/btc-terminal-v3/app/page.tsx
 import * as entry from '../../../app/page.js'
 import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
 

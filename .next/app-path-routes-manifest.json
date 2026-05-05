@@ -1,10 +1,18 @@
 {
-  "/api/market/route": "/api/market",
   "/_not-found/page": "/_not-found",
-  "/api/groq/route": "/api/groq",
-  "/api/kalshi/route": "/api/kalshi",
-  "/api/orderbook/route": "/api/orderbook",
+  "/api/market/route": "/api/market",
   "/api/backtest/route": "/api/backtest",
+  "/api/groq/route": "/api/groq",
+  "/api/decision-engine/route": "/api/decision-engine",
+  "/api/best-trade/route": "/api/best-trade",
+  "/api/orderbook/route": "/api/orderbook",
+  "/api/kalshi/route": "/api/kalshi",
+  "/api/decision/route": "/api/decision",
   "/api/signal/route": "/api/signal",
+  "/api/signals/route": "/api/signals",
+  "/api/signal-history/route": "/api/signal-history",
+  "/api/trust-panel/route": "/api/trust-panel",
+  "/api/trust/route": "/api/trust",
+  "/api/simulation/route": "/api/simulation",
   "/page": "/"
 }
