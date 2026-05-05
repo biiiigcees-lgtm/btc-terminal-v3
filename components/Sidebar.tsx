@@ -5,14 +5,15 @@ import { useTerminal } from "@/store/terminal";
 import clsx from "clsx";
 
 const TABS = [
-  { id: "overview",  label: "Overview",  icon: "◫" },
-  { id: "kalshi",    label: "Kalshi",    icon: "⌁" },
-  { id: "consensus", label: "Consensus", icon: "◎" },
-  { id: "planner",   label: "Planner",   icon: "◈" },
-  { id: "backtest",  label: "Backtest",  icon: "⟲", badge: "NEW" },
-  { id: "accuracy",  label: "Accuracy",  icon: "◉", badge: "NEW" },
-  { id: "logs",      label: "Logs",      icon: "≣" },
-  { id: "alerts",    label: "Alerts",    icon: "⏺" },
+  { id: "overview",    label: "Overview",   icon: "◫" },
+  { id: "kalshi",      label: "Kalshi",     icon: "⌁" },
+  { id: "consensus",   label: "Consensus",  icon: "◎" },
+  { id: "planner",     label: "Planner",    icon: "◈" },
+  { id: "pnltracker",  label: "PnL Tracker", icon: "📊", badge: "NEW" },
+  { id: "backtest",    label: "Backtest",   icon: "⟲" },
+  { id: "accuracy",    label: "Accuracy",   icon: "◉" },
+  { id: "logs",        label: "Logs",       icon: "≣" },
+  { id: "alerts",      label: "Alerts",     icon: "⏺" },
 ] as const;
 
 export function Sidebar() {

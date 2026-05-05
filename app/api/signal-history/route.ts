@@ -11,7 +11,7 @@ export async function GET(request: Request) {
     const url = new URL(request.url);
     const limit = parseInt(url.searchParams.get("limit") || "20");
     const outcome = url.searchParams.get("outcome") as "WIN" | "LOSS" | "PENDING" | "CANCELLED" | undefined;
-    const direction = url.searchParams.get("direction") as "ABOVE" | "BELOW" | "WAIT" | undefined;
+    const direction = url.searchParams.get("direction") as "ABOVE" | "BELOW" | "WAIT" | "ALL" | undefined;
     
     // Get signal history
     const signals = getSignalHistory(limit, undefined, outcome);

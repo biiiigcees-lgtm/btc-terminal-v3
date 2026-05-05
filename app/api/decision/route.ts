@@ -107,8 +107,8 @@ export async function GET() {
       });
     }
 
-    // Apply trade filter
-    const filterResult = filterTrade(evAnalysis, alpha, consensus, indicators, market, sessionState);
+    // Apply trade filter (evAnalysis is non-null here — null check above exits early)
+    const filterResult = filterTrade(evAnalysis!, alpha, consensus, indicators, market, sessionState);
 
     if (!filterResult.shouldTrade) {
       return NextResponse.json({

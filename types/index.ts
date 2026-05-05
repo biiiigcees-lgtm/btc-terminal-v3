@@ -69,6 +69,17 @@ export interface SignalResult {
   timestamp: number;
 }
 
+export interface MicrostructureData {
+  tickVelocity: number;
+  orderFlowImbalance: number;
+  spreadExpansion: number;
+  aggressorRatio: number;
+  volatilityBurst: boolean;
+  syntheticPrice: number;
+  priceVelocity: number;
+  volumeWeightedPrice: number;
+}
+
 export interface MarketData {
   price: number;
   change24h: number;
@@ -87,6 +98,10 @@ export interface MarketData {
   candles_4h: Candle[];
   halvingDays: number;
   timestamp: number;
+  microstructure?: MicrostructureData;
+  syntheticPrice?: number;
+  priceVelocity?: number;
+  volumeWeightedPrice?: number;
 }
 
 export interface TradeLog {
@@ -203,4 +218,54 @@ export interface GroqSignalComment {
   confidence: string;
   keyFactors: string[];
   timestamp: number;
+}
+
+// ── PnL Tracker ───────────────────────────────────────────────────────────────
+export interface SimulatedTrade {
+  id: string;
+  timestamp: number;
+  direction: "ABOVE" | "BELOW";
+  entryPrice: number;
+  exitPrice: number | null;
+  alphaScore: number;
+  confidenceTier: string;
+  betSize: number;
+  pnl: number | null;
+  resolved: boolean;
+  correct: boolean | null;
+}
+
+export interface SimulatedPnLStats {
+  totalTrades: number;
+  wins: number;
+  losses: number;
+  winRate: number;
+  netPnL: number;
+  peakPnL: number;
+  maxDrawdown: number;
+  sharpeRatio: number;
+  equityCurve: { timestamp: number; pnl: number }[];
+}
+
+// ── Strategy & Weights ────────────────────────────────────────────────────────
+export type StrategyMode = "AGGRESSIVE" | "BALANCED" | "CONSERVATIVE";
+
+export interface AgentWeights {
+  momentum: number;
+  volatility: number;
+  meanReversion: number;
+  orderFlow: number;
+  kalshi: number;
+  lastUpdated: number;
+  totalTrades: number;
+}
+
+export interface WeightOptimizationResult {
+  currentWeights: AgentWeights;
+  optimizedWeights: AgentWeights;
+  improvement: number;
+  confidence: number;
+  basedOnTrades: number;
+  insights: string[];
+  performanceByBracket: Record<string, { accuracy: number; trades: number; weight: number }>;
 }

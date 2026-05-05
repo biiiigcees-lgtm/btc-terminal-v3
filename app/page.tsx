@@ -13,6 +13,7 @@ import { KalshiTab } from "@/components/KalshiTab";
 import { ConsensusTab } from "@/components/ConsensusTab";
 import { BacktestTab } from "@/components/BacktestTab";
 import { AccuracyTab } from "@/components/AccuracyTab";
+import { PnLTrackerTab } from "@/components/PnLTrackerTab";
 import { LockOverlay } from "@/components/LockOverlay";
 
 export default function TerminalPage() {
@@ -92,6 +93,7 @@ export default function TerminalPage() {
     alerts: <AlertsTab />,
     backtest: <BacktestTab />,
     accuracy: <AccuracyTab />,
+    pnltracker: <PnLTrackerTab />,
   };
 
   return (
