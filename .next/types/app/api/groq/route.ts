@@ -1,4 +1,4 @@
-// File: /Users/bigcees/CascadeProjects/btc-terminal-v3/app/api/groq/route.ts
+// File: /home/user/btc-terminal-v3/app/api/groq/route.ts
 import * as entry from '../../../../../app/api/groq/route.js'
 import type { NextRequest } from 'next/server.js'
 

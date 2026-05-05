@@ -1,10 +1,18 @@
 {
-  "/api/market/route": "app/api/market/route.js",
   "/_not-found/page": "app/_not-found/page.js",
-  "/api/groq/route": "app/api/groq/route.js",
-  "/api/kalshi/route": "app/api/kalshi/route.js",
-  "/api/orderbook/route": "app/api/orderbook/route.js",
+  "/api/market/route": "app/api/market/route.js",
   "/api/backtest/route": "app/api/backtest/route.js",
+  "/api/groq/route": "app/api/groq/route.js",
+  "/api/decision-engine/route": "app/api/decision-engine/route.js",
+  "/api/best-trade/route": "app/api/best-trade/route.js",
+  "/api/orderbook/route": "app/api/orderbook/route.js",
+  "/api/kalshi/route": "app/api/kalshi/route.js",
+  "/api/decision/route": "app/api/decision/route.js",
   "/api/signal/route": "app/api/signal/route.js",
+  "/api/signals/route": "app/api/signals/route.js",
+  "/api/signal-history/route": "app/api/signal-history/route.js",
+  "/api/trust-panel/route": "app/api/trust-panel/route.js",
+  "/api/trust/route": "app/api/trust/route.js",
+  "/api/simulation/route": "app/api/simulation/route.js",
   "/page": "app/page.js"
 }
