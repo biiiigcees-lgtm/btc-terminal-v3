@@ -1,0 +1,10 @@
+{
+  "/api/market/route": "app/api/market/route.js",
+  "/_not-found/page": "app/_not-found/page.js",
+  "/api/groq/route": "app/api/groq/route.js",
+  "/api/kalshi/route": "app/api/kalshi/route.js",
+  "/api/orderbook/route": "app/api/orderbook/route.js",
+  "/api/backtest/route": "app/api/backtest/route.js",
+  "/api/signal/route": "app/api/signal/route.js",
+  "/page": "app/page.js"
+}

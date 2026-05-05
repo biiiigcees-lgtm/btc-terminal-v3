@@ -1,0 +1,10 @@
+{
+  "/api/market/route": "/api/market",
+  "/_not-found/page": "/_not-found",
+  "/api/groq/route": "/api/groq",
+  "/api/kalshi/route": "/api/kalshi",
+  "/api/orderbook/route": "/api/orderbook",
+  "/api/backtest/route": "/api/backtest",
+  "/api/signal/route": "/api/signal",
+  "/page": "/"
+}
