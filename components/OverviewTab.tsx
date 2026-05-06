@@ -49,12 +49,15 @@ export function OverviewTab() {
             { label: "CMF", value: signal?.indicators?.cmf?.toFixed(3) },
             { label: "BB Upper", value: `$${fmt(signal?.indicators?.bbUpper ?? 0)}` },
             { label: "BB Lower", value: `$${fmt(signal?.indicators?.bbLower ?? 0)}` },
-          ].map(({ label, value }) => (
-            <div key={label} className="bg-surface rounded-lg p-2 text-center">
-              <div className="text-dim text-[9px] font-mono uppercase">{label}</div>
-              <div className="text-sm font-mono font-bold text-text mt-0.5 num">{value ?? "—"}</div>
-            </div>
-          ))}
+          ].map(({ label, value, warn }) => {
+            const isWarning = warn ? warn(parseFloat(value ?? "0")) : false;
+            return (
+              <div key={label} className="bg-surface rounded-lg p-2 text-center">
+                <div className="text-dim text-[9px] font-mono uppercase">{label}</div>
+                <div className={clsx("text-sm font-mono font-bold mt-0.5 num", isWarning ? "text-amber" : "text-text")}>{value ?? "—"}</div>
+              </div>
+            );
+          })}
         </div>
       </div>
 
@@ -77,7 +80,7 @@ export function OverviewTab() {
         <div className="bg-panel border border-border rounded-xl p-4">
           <div className="text-dim text-xs font-mono uppercase mb-2">Signal Badge</div>
           <div className={clsx("text-2xl font-mono font-black",
-            signal?.alphaScore ?? 0 >= 70 ? "text-green" : signal?.alphaScore ?? 0 >= 60 ? "text-amber" : "text-red"
+            (signal?.alphaScore ?? 0) >= 70 ? "text-green" : (signal?.alphaScore ?? 0) >= 60 ? "text-amber" : "text-red"
           )}>
             {signal?.direction ?? "WAIT"} {signal?.alphaScore ?? "—"}
           </div>

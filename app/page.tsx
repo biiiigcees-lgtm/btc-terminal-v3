@@ -25,6 +25,9 @@ export default function TerminalPage() {
 
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const obIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  // Track latest price in a ref so the interval closure stays stable
+  const marketPriceRef = useRef<number | null>(null);
+  marketPriceRef.current = market?.price ?? null;
 
   // Main data fetch — market + signal every 15s
   const fetchAll = useCallback(async () => {
@@ -67,22 +70,20 @@ export default function TerminalPage() {
     fetchOrderBook();
     fetchKalshi();
 
-    // Resolve pending accuracy entries on every tick
     intervalRef.current = setInterval(() => {
       fetchAll();
       checkAndApplyLossLock();
       fetchKalshi();
-      if (market?.price) resolveAccuracyEntries(market.price);
+      if (marketPriceRef.current) resolveAccuracyEntries(marketPriceRef.current);
     }, 15000);
 
-    // Order book on faster cadence
     obIntervalRef.current = setInterval(fetchOrderBook, 5000);
 
     return () => {
       if (intervalRef.current) clearInterval(intervalRef.current);
       if (obIntervalRef.current) clearInterval(obIntervalRef.current);
     };
-  }, [fetchAll, fetchOrderBook, fetchKalshi, checkAndApplyLossLock, resolveAccuracyEntries, market?.price]);
+  }, [fetchAll, fetchOrderBook, fetchKalshi, checkAndApplyLossLock, resolveAccuracyEntries]);
 
   const tabMap: Record<string, React.ReactNode> = {
     overview: <OverviewTab />,
