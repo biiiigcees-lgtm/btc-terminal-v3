@@ -3,9 +3,23 @@
 
 import { NextRequest, NextResponse } from "next/server";
 
+const VALID_SIDES = new Set(["ABOVE", "BELOW"]);
+
 export async function POST(req: NextRequest) {
   try {
-    const { market, side, size } = await req.json();
+    const body = await req.json();
+    const { market, side, size } = body;
+
+    // Input validation
+    if (typeof market !== "string" || market.trim().length === 0) {
+      return NextResponse.json({ error: "Invalid market ticker" }, { status: 400 });
+    }
+    if (!VALID_SIDES.has(side)) {
+      return NextResponse.json({ error: "side must be ABOVE or BELOW" }, { status: 400 });
+    }
+    if (typeof size !== "number" || !isFinite(size) || size <= 0 || size > 10000) {
+      return NextResponse.json({ error: "size must be a positive number ≤ 10000" }, { status: 400 });
+    }
 
     const apiKey = process.env.KALSHI_API_KEY;
     if (apiKey) {
