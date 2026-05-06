@@ -269,3 +269,24 @@ export interface WeightOptimizationResult {
   insights: string[];
   performanceByBracket: Record<string, { accuracy: number; trades: number; weight: number }>;
 }
+
+// ── Execution Engine ──────────────────────────────────────────────────────────
+export interface ExecutionRecord {
+  id: string;
+  timestamp: number;
+  signal: {
+    direction: "ABOVE" | "BELOW" | "WAIT";
+    alphaScore: number;
+    confidence: number;
+    ev: number;
+  };
+  riskGate: "PASSED" | "BLOCKED";
+  blockReason?: string;
+  fill?: {
+    filled: boolean;
+    price: number;
+    size: number;
+    live: boolean;
+  };
+  pnlImpact: number;
+}

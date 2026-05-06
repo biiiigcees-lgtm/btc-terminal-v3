@@ -1,5 +1,5 @@
 "use client";
-// components/Sidebar.tsx — Upgraded with all 9 new features
+// components/Sidebar.tsx — Upgraded with all 9 new features + Execution Engine
 
 import { useTerminal } from "@/store/terminal";
 import clsx from "clsx";
@@ -9,7 +9,8 @@ const TABS = [
   { id: "kalshi",      label: "Kalshi",     icon: "⌁" },
   { id: "consensus",   label: "Consensus",  icon: "◎" },
   { id: "planner",     label: "Planner",    icon: "◈" },
-  { id: "pnltracker",  label: "PnL Tracker", icon: "📊", badge: "NEW" },
+  { id: "pnltracker",  label: "PnL Tracker", icon: "📊" },
+  { id: "execution",   label: "Execution",  icon: "⚡", badge: "NEW" },
   { id: "backtest",    label: "Backtest",   icon: "⟲" },
   { id: "accuracy",    label: "Accuracy",   icon: "◉" },
   { id: "logs",        label: "Logs",       icon: "≣" },
@@ -17,7 +18,7 @@ const TABS = [
 ] as const;
 
 export function Sidebar() {
-  const { activeTab, setTab, session, signal, dataStale, getAccuracyStats, backtestResult } = useTerminal();
+  const { activeTab, setTab, session, signal, dataStale, getAccuracyStats, backtestResult, autoMode } = useTerminal();
   const accuracyStats = getAccuracyStats();
 
   const tierColor =
@@ -37,7 +38,7 @@ export function Sidebar() {
           <span className="text-accent text-xl font-display font-bold">₿</span>
           <div>
             <div className="text-text font-display font-bold text-sm leading-none">BTC TERMINAL</div>
-            <div className="text-dim text-[10px] font-mono mt-0.5">v3.1 · 9 UPGRADES</div>
+            <div className="text-dim text-[10px] font-mono mt-0.5">v3.1 · EXECUTION ENGINE</div>
           </div>
         </div>
       </div>
@@ -46,6 +47,14 @@ export function Sidebar() {
       {dataStale && (
         <div className="mx-2 mt-2 bg-red/10 border border-red/30 rounded px-2 py-1.5 text-red text-[10px] font-mono animate-pulse">
           ⚠️ DATA STALE — Check connection
+        </div>
+      )}
+
+      {/* Auto mode indicator */}
+      {autoMode && (
+        <div className="mx-2 mt-2 bg-green/10 border border-green/30 rounded px-2 py-1.5 text-green text-[10px] font-mono flex items-center gap-1.5">
+          <div className="w-1.5 h-1.5 rounded-full bg-green animate-pulse" />
+          AUTO EXECUTION ON
         </div>
       )}
 
