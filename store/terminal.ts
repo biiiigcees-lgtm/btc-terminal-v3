@@ -5,7 +5,7 @@ import { persist } from "zustand/middleware";
 import type {
   TradeLog, SessionStats, MarketData, SignalResult,
   OrderBookSnapshot, BacktestResult, SignalAccuracyEntry, GroqSignalComment,
-  AgentWeights, WeightOptimizationResult,
+  AgentWeights, WeightOptimizationResult, ExecutionRecord,
 } from "@/types";
 import { createAccuracyEntry, resolveAccuracyEntry, calcAccuracyStats } from "@/lib/signalTracker";
 import { optimizeWeights, computeSimulatedPnLStats, BASE_WEIGHTS } from "@/lib/weightOptimizer";
@@ -43,7 +43,7 @@ interface TerminalStore {
   setSignal: (s: SignalResult) => void;
   setLoading: (v: boolean) => void;
 
-  activeTab: "overview" | "kalshi" | "consensus" | "planner" | "logs" | "alerts" | "backtest" | "accuracy" | "pnltracker";
+  activeTab: "overview" | "kalshi" | "consensus" | "planner" | "logs" | "alerts" | "backtest" | "accuracy" | "pnltracker" | "execution";
   setTab: (t: TerminalStore["activeTab"]) => void;
 
   orderBook: OrderBookSnapshot | null;
@@ -94,7 +94,7 @@ interface TerminalStore {
   // ── Strategy & Edge Threshold ───────────────────────────────────────────
   strategyMode: StrategyMode;
   setStrategyMode: (m: StrategyMode) => void;
-  edgeThreshold: number; // 0-100 slider
+  edgeThreshold: number;
   setEdgeThreshold: (v: number) => void;
 
   // ── Custom Weights (from optimizer) ────────────────────────────────────
@@ -102,8 +102,17 @@ interface TerminalStore {
   setCustomWeights: (w: AgentWeights | null) => void;
   getWeightOptimization: () => WeightOptimizationResult;
 
-  // ── Simulated PnL Stats (derived from accuracyLog) ─────────────────────
+  // ── Simulated PnL Stats ─────────────────────────────────────────────────
   getSimulatedPnLStats: () => ReturnType<typeof computeSimulatedPnLStats>;
+
+  // ── Execution Engine ────────────────────────────────────────────────────
+  autoMode: boolean;
+  liveTradingEnabled: boolean;
+  executionLog: ExecutionRecord[];
+  setAutoMode: (v: boolean) => void;
+  setLiveTradingEnabled: (v: boolean) => void;
+  addExecutionRecord: (r: ExecutionRecord) => void;
+  clearExecutionLog: () => void;
 }
 
 export const useTerminal = create<TerminalStore>()(
@@ -127,7 +136,6 @@ export const useTerminal = create<TerminalStore>()(
       },
       setLoading: (v) => {
         set({ isLoading: v });
-        // Mark data stale if loading hasn't resolved in 90s
         if (!v) return;
         setTimeout(() => {
           const { lastUpdated } = get();
@@ -285,6 +293,16 @@ export const useTerminal = create<TerminalStore>()(
       getWeightOptimization: () => optimizeWeights(get().accuracyLog),
 
       getSimulatedPnLStats: () => computeSimulatedPnLStats(get().accuracyLog),
+
+      // ── Execution Engine ──────────────────────────────────────────────────
+      autoMode: false,
+      liveTradingEnabled: false,
+      executionLog: [],
+      setAutoMode: (v) => set({ autoMode: v }),
+      setLiveTradingEnabled: (v) => set({ liveTradingEnabled: v }),
+      addExecutionRecord: (r) =>
+        set((s) => ({ executionLog: [r, ...s.executionLog].slice(0, 200) })),
+      clearExecutionLog: () => set({ executionLog: [] }),
     }),
     {
       name: "btc-terminal-v3",
@@ -295,6 +313,8 @@ export const useTerminal = create<TerminalStore>()(
         strategyMode: s.strategyMode,
         edgeThreshold: s.edgeThreshold,
         customWeights: s.customWeights,
+        autoMode: s.autoMode,
+        liveTradingEnabled: s.liveTradingEnabled,
       }),
     }
   )
