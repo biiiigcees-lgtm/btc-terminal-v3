@@ -3,6 +3,7 @@
 
 import { useEffect, useCallback, useRef } from "react";
 import { useTerminal } from "@/store/terminal";
+import { useAlphaStream } from "@/lib/useAlphaStream";
 import { Sidebar } from "@/components/Sidebar";
 import { TopBar } from "@/components/TopBar";
 import { PlannerTab } from "@/components/PlannerTab";
@@ -14,6 +15,7 @@ import { ConsensusTab } from "@/components/ConsensusTab";
 import { BacktestTab } from "@/components/BacktestTab";
 import { AccuracyTab } from "@/components/AccuracyTab";
 import { PnLTrackerTab } from "@/components/PnLTrackerTab";
+import { ExecutionPanel } from "@/components/ExecutionPanel";
 import { LockOverlay } from "@/components/LockOverlay";
 
 export default function TerminalPage() {
@@ -22,6 +24,9 @@ export default function TerminalPage() {
     setKalshiMarkets, resolveAccuracyEntries,
     activeTab, session, checkAndApplyLossLock, market,
   } = useTerminal();
+
+  // Execution engine — triggers on every new signal when autoMode is on
+  useAlphaStream();
 
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const obIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -95,6 +100,7 @@ export default function TerminalPage() {
     backtest: <BacktestTab />,
     accuracy: <AccuracyTab />,
     pnltracker: <PnLTrackerTab />,
+    execution: <ExecutionPanel />,
   };
 
   return (
