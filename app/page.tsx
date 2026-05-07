@@ -6,6 +6,7 @@ import { useTerminal } from "@/store/terminal";
 import { useAlphaStream } from "@/lib/useAlphaStream";
 import { Sidebar } from "@/components/Sidebar";
 import { TopBar } from "@/components/TopBar";
+import { DashboardTab } from "@/components/DashboardTab";
 import { PlannerTab } from "@/components/PlannerTab";
 import { OverviewTab } from "@/components/OverviewTab";
 import { LogsTab } from "@/components/LogsTab";
@@ -91,6 +92,7 @@ export default function TerminalPage() {
   }, [fetchAll, fetchOrderBook, fetchKalshi, checkAndApplyLossLock, resolveAccuracyEntries]);
 
   const tabMap: Record<string, React.ReactNode> = {
+    dashboard: <DashboardTab />,
     overview: <OverviewTab />,
     kalshi: <KalshiTab />,
     consensus: <ConsensusTab />,
@@ -111,7 +113,7 @@ export default function TerminalPage() {
         <main className="flex-1 overflow-hidden relative">
           {session.isLocked && <LockOverlay />}
           <div className="h-full overflow-y-auto p-4">
-            {tabMap[activeTab] ?? <PlannerTab />}
+            {tabMap[activeTab] ?? <DashboardTab />}
           </div>
         </main>
       </div>

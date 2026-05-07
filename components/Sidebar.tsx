@@ -5,6 +5,7 @@ import { useTerminal } from "@/store/terminal";
 import clsx from "clsx";
 
 const TABS = [
+  { id: "dashboard",   label: "Live Dashboard", icon: "◉", badge: "LIVE" },
   { id: "overview",    label: "Overview",   icon: "◫" },
   { id: "kalshi",      label: "Kalshi",     icon: "⌁" },
   { id: "consensus",   label: "Consensus",  icon: "◎" },
